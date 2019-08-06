@@ -23,7 +23,7 @@ function purchaseItem() {
             message: "Welcome to Bamazon",
             choices: [
                 "What is the ID of the product that you would like to buy?",
-                "How many of the units would you like to buy?"
+                "How many units would you like to buy?"
             ]
         })
 }
