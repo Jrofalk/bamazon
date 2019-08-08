@@ -12,56 +12,54 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
     displayItems();
+    
 });
 
 function displayItems() {
     connection.query("SELECT item_id, product_name, price FROM products", function (err, res) {
         if (err) throw err;
-        for (i = 0; i < res.length; i++) {
+        for (var i = 0; i < res.length; i++) {
             console.log("-------------------------------------------------------------------------------");
             console.log("Product ID: " + res[i].item_id + " || Product Name: " + res[i].product_name + " || Price: $" + res[i].price);
             console.log("-------------------------------------------------------------------------------");
         }
+        getPrice();
+    });
+
+    
+    function getPrice(){
         inquirer
-            .prompt([
-                {
+            .prompt({
+                
                     name: "choice",
                     type: "input",
                     message: "What is the ID number of the product that you would like to buy?"
-                },
+                
                 //{
                 // name: "amount",
                 //type: "input",
                 //message: "How many units of the product would you like to buy?"
                 //}
-            ])
-            .then(function (answer) {
-                var query = "SELECT item_id FROM bamazon_DB WHERE ?";
-                connection.query(query, { item_id: answer }, function (err, res) {
-                    for (var i = 0; i < res.length; i++) {
-                        console.log(res[i].item_id);
-                    }
-                })
-
-                //inquirer
-                //.prompt({
-                // name: "action",
-                // type: "list",
-                // message: "Welcome to Bamazon",
-                // choices: [
-                // "What is the ID of the product that you would like to buy?",
-                //"How many units would you like to buy?"
-                // ]
-                //})
-
-                //.then(function (answer) {
-                // console.log(answer);
-                //})
-
-
-                connection.end();
             })
-    }
+            .then(function (answer) {
+                var query = "SELECT price FROM products WHERE ?";
+                //Choice below comes from name above, the prompt is an object
+                connection.query(query, { item_id: answer.choice }, function (err, res) {
+                    for (var i = 0; i < res.length; i++) {
+                        console.log("Price: " + res[i].price);
+                        
+                    }
+                    });
+                    
+                });
+            }
+        }
 
-    )
-}
+    
+            
+
+
+
+
+
+
