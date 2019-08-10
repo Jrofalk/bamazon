@@ -12,7 +12,7 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
     displayItems();
-    
+
 });
 
 function displayItems() {
@@ -26,37 +26,39 @@ function displayItems() {
         getPrice();
     });
 
-    
-    function getPrice(){
+
+    function getPrice() {
         inquirer
-            .prompt({
-                
+            .prompt([
+                {
                     name: "choice",
                     type: "input",
                     message: "What is the ID number of the product that you would like to buy?"
-                
-                //{
-                // name: "amount",
-                //type: "input",
-                //message: "How many units of the product would you like to buy?"
-                //}
-            })
-            .then(function (answer) {
+                },
+                {
+                    name: "amount",
+                    type: "input",
+                    message: "How many units of the product would you like to buy?"
+                },
+            ])
+            .then(function (answers) {
+                var choiceId = answers.choice
+                var choiceAmount = answers.amount
                 var query = "SELECT price FROM products WHERE ?";
-                //Choice below comes from name above, the prompt is an object
-                connection.query(query, { item_id: answer.choice }, function (err, res) {
+                //Choice below in answer.choice comes from name above, the prompt is an object. Item_id refers to MySQL table.
+                connection.query(query, { item_id: choiceId }, function (err, res) {
                     for (var i = 0; i < res.length; i++) {
-                        console.log("Price: " + res[i].price);
-                        
+                        console.log("$" + res[i].price * choiceAmount);
                     }
-                    });
-                    
                 });
-            }
-        }
 
-    
-            
+            });
+    }
+}
+
+//Lookup how to hide credentials (password), as Jonathan posted in slack
+
+
 
 
 
