@@ -44,12 +44,18 @@ function displayItems() {
             .then(function (answers) {
                 var choiceId = answers.choice
                 var choiceAmount = answers.amount
-                var query = "SELECT price FROM products WHERE ?";
+                var query = "SELECT price, stock_quantity FROM products WHERE ?";
                 //Choice below in answer.choice comes from name above, the prompt is an object. Item_id refers to MySQL table.
                 connection.query(query, { item_id: choiceId }, function (err, res) {
                     for (var i = 0; i < res.length; i++) {
                         console.log("$" + res[i].price * choiceAmount);
+                        //console.log(res[i].stock_quantity)
+                        if(choiceAmount > res[i].stock_quantity){
+                            console.log('Insufficient quantity!')
+                        } 
                     }
+                    //Must have another query here to search database OR include stock amount in query above
+                
                 });
 
             });
