@@ -44,23 +44,38 @@ function displayItems() {
             .then(function (answers) {
                 var choiceId = answers.choice
                 var choiceAmount = answers.amount
-                var query = "SELECT price, stock_quantity FROM products WHERE ?";
+                var query = "SELECT price, stock_quantity, product_name FROM products WHERE ?";
                 //Choice below in answer.choice comes from name above, the prompt is an object. Item_id refers to MySQL table.
                 connection.query(query, { item_id: choiceId }, function (err, res) {
                     for (var i = 0; i < res.length; i++) {
-                        console.log("$" + res[i].price * choiceAmount);
+                        //console.log("$" + res[i].price * choiceAmount);
                         //console.log(res[i].stock_quantity)
-                        if(choiceAmount > res[i].stock_quantity){
-                            console.log('Insufficient quantity!')
-                        } 
+                        if (choiceAmount > res[i].stock_quantity) {
+                            console.log('Insufficient quantity at this time.')
+                        }
+                        else {
+                            var remainder = res[i].stock_quantity - choiceAmount;
+                            console.log(choiceAmount + " unit(s) of " + res[i].product_name + " successfully purchased.");
+                            console.log('Total amount due is: $' + res[i].price * choiceAmount);
+                            connection.query(
+                                "UPDATE products SET ? WHERE ?",
+                                [
+                                    {
+                                        stock_quantity: remainder
+                                    },
+                                    {
+                                        item_id: choiceId
+                                    }
+                                ]
+                            )
+                        }
                     }
-                    //Must have another query here to search database OR include stock amount in query above
-                
                 });
-
             });
     }
 }
+
+
 
 //Lookup how to hide credentials (password), as Jonathan posted in slack
 
