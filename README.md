@@ -2,7 +2,7 @@
 
 "Bamazon" is an application that acts as a storefront for a set of products. Information regarding these products is stored within a MySQL database. Bamazon takes in orders from a user and then depletes the stock recorded in said database.
 
-# Directions:
+## Directions:
 
 A user is presented with a list of the items available for purchase.
 
