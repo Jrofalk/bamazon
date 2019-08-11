@@ -12,7 +12,6 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
     displayItems();
-
 });
 
 function displayItems() {
@@ -25,7 +24,6 @@ function displayItems() {
         }
         getPrice();
     });
-
 
     function getPrice() {
         inquirer
@@ -45,7 +43,7 @@ function displayItems() {
                 var choiceId = answers.choice
                 var choiceAmount = answers.amount
                 var query = "SELECT price, stock_quantity, product_name FROM products WHERE ?";
-                //Choice below in answer.choice comes from name above, the prompt is an object. Item_id refers to MySQL table.
+                //Item_id refers to MySQL table data column.
                 connection.query(query, { item_id: choiceId }, function (err, res) {
                     for (var i = 0; i < res.length; i++) {
                         //console.log("$" + res[i].price * choiceAmount);
@@ -75,9 +73,6 @@ function displayItems() {
     }
 }
 
-
-
-//Lookup how to hide credentials (password), as Jonathan posted in slack
 
 
 
