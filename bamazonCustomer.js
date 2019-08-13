@@ -1,11 +1,12 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+require("dotenv").config();
 
 var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "Tomiko101387",
+    password: process.env.Password,
     database: "bamazon_DB"
 });
 
@@ -53,8 +54,10 @@ function displayItems() {
                         }
                         else {
                             var remainder = res[i].stock_quantity - choiceAmount;
+                            var totalDue = res[i].price * choiceAmount;
+                            var finalTotal = totalDue.toFixed(2);
                             console.log(choiceAmount + " unit(s) of " + res[i].product_name + " successfully purchased.");
-                            console.log('Total amount due is: $' + res[i].price * choiceAmount);
+                            console.log('Total amount due is: $' + finalTotal);
                             connection.query(
                                 "UPDATE products SET ? WHERE ?",
                                 [
